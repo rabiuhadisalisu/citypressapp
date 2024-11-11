@@ -19,7 +19,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2  # Use the latest Flutter action
         with:
-          flutter-version: stable  # Use the stable version of Flutter
+          flutter-version: "3.1.5"  # Match the required version from pubspec.yaml
 
       - name: Install dependencies
         run: flutter pub get  # Get Flutter dependencies
@@ -28,7 +28,7 @@ jobs:
         run: flutter build apk --release  # Build the release APK
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4.4.3  # Upload the APK as an artifact
+        uses: actions/upload-artifact@v3  # Upload the APK as an artifact
         with:
           name: flutter-apk
           path: build/app/outputs/flutter-apk/app-release.apk  # Path to the built APK
