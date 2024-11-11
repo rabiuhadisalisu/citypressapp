@@ -91,3 +91,23 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.example.citypress_web"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // Add the following block to specify Java compatibility
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    // Other configurations
+}
