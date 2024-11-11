@@ -1,7 +1,7 @@
 name: citypress_web
 description: A new Flutter project.
 publish_to: 'none'
-version: 24.1.1+1
+version: 24.12.1+1
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
