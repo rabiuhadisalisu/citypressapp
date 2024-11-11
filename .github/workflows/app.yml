@@ -39,7 +39,7 @@ jobs:
       - run: flutter build apk
 
       # Upload generated APK to artifacts.
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4.4.3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
