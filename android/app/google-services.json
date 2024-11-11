@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788118686444",
+    "project_id": "citypress-app",
+    "storage_bucket": "citypress-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788118686444:android:b48d11da9d5e8beac0b3c9",
+        "android_client_info": {
+          "package_name": "com.rabyte.citypress"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFYJ-J1kDAbYZo8Ooh00q7RBlB-eh1LSQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
