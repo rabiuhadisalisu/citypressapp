@@ -20,8 +20,14 @@ jobs:
         with:
           channel: 'beta'
     
-      # Install Dart SDK (required for dart format).
-      - run: sudo apt-get update && sudo apt-get install -y dart
+      # Install Dart SDK from the official Dart repository.
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https
+          sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.asc | apt-key add -'
+          sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/stable/debian.tar.gz | tar -xz -C /etc/apt/sources.list.d/'
+          sudo apt-get update -y
+          sudo apt-get install -y dart
 
       # Get Flutter dependencies.
       - run: flutter pub get
@@ -39,7 +45,7 @@ jobs:
       - run: flutter build apk
 
       # Upload generated APK to artifacts.
-      - uses: actions/upload-artifact@v4.4.3
+      - uses: actions/upload-artifact@v3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
