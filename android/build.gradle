@@ -1,20 +1,24 @@
-
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        google()  // Ensure Google repository is included
+        mavenCentral()  // Ensure Maven Central repository is included
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = '../build'  // Set the build directory for the root project
+
+// Configure all subprojects to use the root project build directory
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    // Any other configurations you want to add for subprojects can go here
 }
 
+// Ensure the app project evaluation happens after root project configuration
+subprojects {
+    project.evaluationDependsOn(':app')  // Ensure app module is evaluated first
+}
+
+// Register a clean task to delete the build directory when necessary
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
