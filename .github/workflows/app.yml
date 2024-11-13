@@ -28,23 +28,7 @@ jobs:
           distribution: 'zulu'  # Use Zulu JDK
           java-version: '11'  # Match Java version in build.gradle
 
-      - name: Set up Android SDK and Tools
-        env:
-          ANDROID_HOME: ${{ runner.androidSdkRoot }}
-          PATH: ${{ runner.androidSdkRoot }}/cmdline-tools/latest/bin:${{ runner.androidSdkRoot }}/platform-tools:$PATH
-        run: |
-          # Download Android Command Line Tools if not available
-          if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
-            mkdir -p $ANDROID_HOME/cmdline-tools
-            curl -o commandlinetools-mac.zip https://dl.google.com/android/repository/commandlinetools-mac-8512546_latest.zip
-            unzip -q commandlinetools-mac.zip -d $ANDROID_HOME/cmdline-tools
-            mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-          fi
-          
-          # Accept licenses and install required Android SDK components
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;30.0.3"
-
+      
       - name: Cache Flutter and Pub dependencies
         uses: actions/cache@v3
         with:
