@@ -19,7 +19,7 @@ jobs:
       - name: Install Flutter using Homebrew
         run: |
           brew update
-          brew install --cask flutter  # Install the latest stable Flutter version via Homebrew
+          brew install --cask flutter  # Install Flutter
           brew install gradle  # Install Gradle as a backup if required
 
       - name: Set up Java
@@ -28,14 +28,22 @@ jobs:
           distribution: 'zulu'  # Use Zulu JDK
           java-version: '11'  # Match Java version in build.gradle
 
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses || true  # Accept all Android SDK licenses
-
-      - name: Set up Android SDK
+      - name: Set up Android SDK and Tools
         env:
           ANDROID_HOME: ${{ runner.androidSdkRoot }}
+          PATH: ${{ runner.androidSdkRoot }}/cmdline-tools/latest/bin:${{ runner.androidSdkRoot }}/platform-tools:$PATH
         run: |
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;30.0.3"  # Install required Android tools
+          # Download Android Command Line Tools if not available
+          if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
+            mkdir -p $ANDROID_HOME/cmdline-tools
+            curl -o commandlinetools-mac.zip https://dl.google.com/android/repository/commandlinetools-mac-8512546_latest.zip
+            unzip -q commandlinetools-mac.zip -d $ANDROID_HOME/cmdline-tools
+            mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+          fi
+          
+          # Accept licenses and install required Android SDK components
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;30.0.3"
 
       - name: Cache Flutter and Pub dependencies
         uses: actions/cache@v3
@@ -61,7 +69,7 @@ jobs:
         run: |
           echo "org.gradle.daemon=true" >> ~/.gradle/gradle.properties
           echo "org.gradle.parallel=true" >> ~/.gradle/gradle.properties
-          echo "android.useAndroidX=true" >> ./android/gradle.properties  # Ensure AndroidX is enabled
+          echo "android.useAndroidX=true" >> ./android/gradle.properties
           echo "android.enableJetifier=true" >> ./android/gradle.properties
 
       - name: Run Gradle wrapper to download dependencies
