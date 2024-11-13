@@ -22,6 +22,12 @@ jobs:
           brew install --cask flutter  # Install Flutter
           brew install gradle  # Install Gradle as a backup if required
 
+      - name: Install Android SDK tools
+        run: |
+          brew install --cask android-sdk
+          export ANDROID_HOME=/usr/local/share/android-sdk
+          export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
+
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
@@ -57,7 +63,10 @@ jobs:
           fi
 
       - name: Run Gradle wrapper to download dependencies
-        run: ./gradlew --no-daemon buildEnvironment  # Prepare the Gradle environment
+        run: |
+          cd android  # Change to android directory
+          ./gradlew --no-daemon buildEnvironment
+          ./gradlew --no-daemon clean build  # Ensure dependencies are downloaded
 
       - name: Build APK
         run: flutter build apk --release  # Build the release APK
