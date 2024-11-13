@@ -3,10 +3,10 @@ name: Build Flutter APK
 on:
   push:
     branches:
-      - main  # or specify the branch you want to trigger the build on
+      - main  # Specify the branch to trigger the build
   pull_request:
     branches:
-      - main  # or specify the branch you want to trigger the build on
+      - main  # Specify the branch to trigger the build
 
 jobs:
   build:
@@ -14,31 +14,64 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Check out the code from the repo
+        uses: actions/checkout@v3  # Check out the code from the repository
 
       - name: Install Flutter using Homebrew
         run: |
           brew update
           brew install --cask flutter  # Install the latest stable Flutter version via Homebrew
-          brew install gradle
+          brew install gradle  # Install Gradle as a backup if required
 
-      - name: Set Flutter version
-        run: flutter --version  # Check the installed Flutter version
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'  # Use Zulu JDK
+          java-version: '11'  # Match Java version in build.gradle
 
-      - name: Set Flutter version
-        run: flutter --version  # Check the installed Flutter version
-        
-      - name: Clean Stucks
-        run: flutter clean
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses || true  # Accept all Android SDK licenses
 
-      - name: Install dependencies
-        run: flutter pub get  # Get Flutter dependencies
+      - name: Set up Android SDK
+        env:
+          ANDROID_HOME: ${{ runner.androidSdkRoot }}
+        run: |
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;30.0.3"  # Install required Android tools
+
+      - name: Cache Flutter and Pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      - name: Check Flutter version
+        run: flutter --version  # Verify the installed Flutter version
+
+      - name: Clean Flutter project
+        run: flutter clean  # Clean the project to prevent build conflicts
+
+      - name: Get Flutter dependencies
+        run: flutter pub get  # Fetch all dependencies
+
+      - name: Set up Gradle properties for caching
+        run: |
+          echo "org.gradle.daemon=true" >> ~/.gradle/gradle.properties
+          echo "org.gradle.parallel=true" >> ~/.gradle/gradle.properties
+          echo "android.useAndroidX=true" >> ./android/gradle.properties  # Ensure AndroidX is enabled
+          echo "android.enableJetifier=true" >> ./android/gradle.properties
+
+      - name: Run Gradle wrapper to download dependencies
+        run: ./gradlew --no-daemon buildEnvironment  # Prepare the Gradle environment
 
       - name: Build APK
         run: flutter build apk --release  # Build the release APK
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4.4.3  # Upload the APK as an artifact
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: flutter-apk
           path: build/app/outputs/flutter-apk/app-release.apk  # Path to the built APK
