@@ -28,7 +28,6 @@ jobs:
           distribution: 'zulu'  # Use Zulu JDK
           java-version: '11'  # Match Java version in build.gradle
 
-
       - name: Cache Flutter and Pub dependencies
         uses: actions/cache@v3
         with:
@@ -53,7 +52,8 @@ jobs:
         run: |
           if [ ! -f "./gradlew" ]; then
             echo "Generating Gradle Wrapper"
-            gradle wrapper
+            cd android  # Generate the Gradle wrapper if it doesn't exist
+            gradle wrapper  # Generate the Gradle wrapper if it doesn't exist
           fi
 
       - name: Run Gradle wrapper to download dependencies
