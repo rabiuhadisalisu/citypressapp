@@ -32,18 +32,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'  # Use Zulu JDK
-          java-version: '23'  # Match Java version in build.gradle
-
-      - name: Cache Flutter and Pub dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pub-cache
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
+          java-version: '17'  # Match Java version in build.gradle
 
       - name: Check Flutter version
         run: flutter --version  # Verify the installed Flutter version
