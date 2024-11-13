@@ -20,9 +20,16 @@ jobs:
         run: |
           brew update
           brew install --cask flutter  # Install the latest stable Flutter version via Homebrew
+          brew install gradle
 
       - name: Set Flutter version
         run: flutter --version  # Check the installed Flutter version
+
+      - name: Set Flutter version
+        run: flutter --version  # Check the installed Flutter version
+        
+      - name: Clean Stucks
+        run: flutter clean
 
       - name: Install dependencies
         run: flutter pub get  # Get Flutter dependencies
@@ -31,7 +38,7 @@ jobs:
         run: flutter build apk --release  # Build the release APK
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v3  # Upload the APK as an artifact
+        uses: actions/upload-artifact@v4.4.3  # Upload the APK as an artifact
         with:
           name: flutter-apk
           path: build/app/outputs/flutter-apk/app-release.apk  # Path to the built APK
