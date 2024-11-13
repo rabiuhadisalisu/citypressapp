@@ -39,12 +39,12 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_17  // Set source compatibility to Java 11
-        targetCompatibility JavaVersion.VERSION_17  // Set target compatibility to Java 11
+        sourceCompatibility JavaVersion.VERSION_11  // Set source compatibility to Java 11
+        targetCompatibility JavaVersion.VERSION_11  // Set target compatibility to Java 11
     }
 
     kotlinOptions {
-        jvmTarget = '1.6'  // Keep JVM target as 1.8 for Kotlin compatibility
+        jvmTarget = '11'  // Keep JVM target as 1.8 for Kotlin compatibility
     }
 
     sourceSets {
