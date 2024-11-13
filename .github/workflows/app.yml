@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'  # Use Zulu JDK
-          java-version: '11'  # Match Java version in build.gradle
+          java-version: '23'  # Match Java version in build.gradle
 
       - name: Cache Flutter and Pub dependencies
         uses: actions/cache@v3
