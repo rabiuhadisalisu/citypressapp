@@ -53,7 +53,7 @@ android {
 
     defaultConfig {
         namespace "com.rabyte.citypress"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 34  // Ensure targetSdkVersion matches compileSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
