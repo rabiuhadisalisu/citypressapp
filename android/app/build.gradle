@@ -39,12 +39,12 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11  // Set source compatibility to Java 11
-        targetCompatibility JavaVersion.VERSION_11  // Set target compatibility to Java 11
+        sourceCompatibility JavaVersion.VERSION_23  // Set source compatibility to Java 11
+        targetCompatibility JavaVersion.VERSION_23  // Set target compatibility to Java 11
     }
 
     kotlinOptions {
-        jvmTarget = '11'  // Keep JVM target as 1.8 for Kotlin compatibility
+        jvmTarget = '23'  // Keep JVM target as 1.8 for Kotlin compatibility
     }
 
     sourceSets {
@@ -53,7 +53,7 @@ android {
 
     defaultConfig {
         namespace "com.rabyte.citypress"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 34  // Ensure targetSdkVersion matches compileSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
