@@ -1,62 +1,64 @@
-name: Build Flutter APK
+name: Build and Release Flutter APK
 
 on:
-  workflow_dispatch:  # Specify the branch to trigger the build
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: macos-latest  # Use macOS for building
+  build-and-release:
+    runs-on: macos-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Check out the code from the repository
+      - uses: actions/checkout@v3
 
-      - name: Install Flutter using Homebrew
-        run: |
-          brew update
-          brew install --cask flutter  # Install Flutter
-          brew install gradle  # Install Gradle as a backup if required
-
-      - name: Install Android SDK tools
-        run: |
-          brew install --cask android-sdk
-          export ANDROID_HOME=/usr/local/share/android-sdk
-          export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
-
-      - name: Set up Java
+      - name: Set Up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'  # Use Zulu JDK
-          java-version: '23'  # Match Java version in build.gradle
+          distribution: 'zulu'
+          java-version: '11'  # Adjust to your project's Java version
 
-      - name: Check Flutter version
-        run: flutter --version  # Verify the installed Flutter version
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v3
+        with:
+          flutter-version: 'stable'  # Or specify a specific version
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-caches-${{ runner.os }}-${{ hashFiles('**/gradle.properties') }}
+          restore-keys: |
+            gradle-caches-${{ runner.os }}-
+
+      - name: Cache Flutter packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: flutter-pub-cache-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            flutter-pub-cache-${{ runner.os }}-
 
       - name: Clean Flutter project
-        run: flutter clean  # Clean the project to prevent build conflicts
+        run: flutter clean
 
       - name: Get Flutter dependencies
-        run: flutter pub get  # Fetch all dependencies
-
-      - name: Generate Gradle Wrapper
-        run: |
-          if [ ! -f "./gradlew" ]; then
-            echo "Generating Gradle Wrapper"
-            cd android  # Generate the Gradle wrapper if it doesn't exist
-            gradle wrapper  # Generate the Gradle wrapper if it doesn't exist
-          fi
-
-      - name: Run Gradle wrapper to download dependencies
-        run: |
-          cd android  # Change to android directory
-          ./gradlew --no-daemon buildEnvironment
-          ./gradlew --no-daemon clean build  # Ensure dependencies are downloaded
+        run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release  # Build the release APK
+        run: flutter build apk --release --no-clean
 
-      - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4.4.3
+      - name: Upload APK to GitHub Release
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
-          path: build/app/outputs/flutter-apk/app-release.apk  # Path to the built APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0.0  # Replace with your desired tag name
+          release_name: Release v1.0.0
+          draft: false
+          prerelease: false
+          body: |
+            This is the first release of my Flutter app.
+          artifacts: flutter-apk
