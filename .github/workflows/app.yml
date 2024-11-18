@@ -17,7 +17,7 @@ jobs:
           java-version: '11'  # Adjust to your project's Java version
 
       - name: Set Up Flutter
-        uses: subosito/flutter-action@v3
+        uses: subosito/flutter-action@v2.16.0
         with:
           flutter-version: 'stable'  # Or specify a specific version
 
