@@ -12,14 +12,14 @@ export 'strings.dart';
 const String androidPackageName = 'com.rabyte.citypress';
 
 // admin url
-String baseurl = 'https://citypress.serv00.net/login';
+String baseurl = 'https://citypress.serv00.net/appadmin';
 String databaseUrl = '$baseurl/api/';
 
 const appName = 'CityPress Data';
 
 // Here is for only reference you have to change it from panel
 
-String webInitialUrl = '';
+String webInitialUrl = 'https://citypress.serv00.net/login';
 
 //Force Update
 String forceUpdatee = '0'; //OFF
