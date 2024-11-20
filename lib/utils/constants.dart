@@ -19,7 +19,7 @@ const appName = 'CityPress Data';
 
 // Here is for only reference you have to change it from panel
 
-String webInitialUrl = 'https://citypress.serv00.net/login';
+String webInitialUrl = '';
 
 //Force Update
 String forceUpdatee = '0'; //OFF
