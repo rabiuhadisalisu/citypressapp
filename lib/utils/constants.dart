@@ -12,7 +12,7 @@ export 'strings.dart';
 const String androidPackageName = 'com.rabyte.citypress';
 
 // admin url
-String baseurl = 'https://citypress.serv00.net/appadmin';
+String baseurl = 'https://citypress.serv00.net/appadmin/public';
 String databaseUrl = '$baseurl/api/';
 
 const appName = 'CityPress Data';
